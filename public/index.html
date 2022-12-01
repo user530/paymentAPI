@@ -5,16 +5,37 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/local.css" />
     <title>Document</title>
   </head>
   <body>
-    <h1>Header</h1>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quae minima
-      sint sapiente reprehenderit dolorem vero repellendus, corporis omnis odio
-      nisi explicabo. Quidem tenetur aut inventore quisquam natus animi
-      perferendis?
-    </p>
+    <!-- NAV BAR -->
+    <section class="section section-center nav">
+      <div class="nav nav-header">
+        <a href="/">Main page</a>
+        <a href="/about">About page</a>
+        <a href="/user">User page</a>
+      </div>
+    </section>
+
+    <!-- PAYMENT SECTION -->
+    <section class="section section-center content">
+      <h1>Stripe Payment</h1>
+      <form id="payment-form">
+        <p>Test Card Number: 4242 4242 4242 4242</p>
+        <div id="card-element"></div>
+        <button id="submit">
+          <div id="spinner" class="spinner hidden"></div>
+          <span id="button-text">Pay</span>
+        </button>
+        <p id="card-error" role="alert"></p>
+        <p class="result-message hidden">
+          Payment succeeded, see the result in your
+          <a href="" target="_blank">Stripe dashboard</a>
+          Refresh the page to pay again.
+        </p>
+      </form>
+    </section>
 
     <script src="./js/script.js"></script>
   </body>
