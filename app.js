@@ -5,8 +5,16 @@ const app = express();
 
 require(`express-async-errors`);
 
+//
 app.use(express.json());
 app.use(express.static(`./public`));
+
+//
+const notFoundMiddleware = require(`./middleware/404`);
+const errorHandlerMiddleware = require(`./middleware/errorHandler`);
+
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
 
 const connectDB = require(`./db/connectDB`);
 
