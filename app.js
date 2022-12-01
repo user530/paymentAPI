@@ -5,9 +5,8 @@ const app = express();
 
 require(`express-async-errors`);
 
-app.get(`/`, (req, res) =>
-  res.status(200).send(`We will build this API, we have the technology!`)
-);
+app.use(express.json());
+app.use(express.static(`./public`));
 
 const connectDB = require(`./db/connectDB`);
 
