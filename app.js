@@ -5,11 +5,16 @@ const app = express();
 
 require(`express-async-errors`);
 
-//
+// Express setup
 app.use(express.json());
 app.use(express.static(`./public`));
 
-//
+// STRIPE
+const stripeController = require(`./controllers/stripe`);
+
+app.post(`/stripe`, stripeController);
+
+// Service Middleware
 const notFoundMiddleware = require(`./middleware/404`);
 const errorHandlerMiddleware = require(`./middleware/errorHandler`);
 
