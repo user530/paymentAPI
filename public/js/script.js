@@ -45,7 +45,6 @@ fetch(`/stripe`, {
 
     // Create credit card Stripe iFrame
     const card = elements.create(`card`, { style: styles });
-    console.log(card);
 
     // Inject Stripe iFrame into the placeholder div
     card.mount(`#card-element`);
@@ -60,8 +59,74 @@ fetch(`/stripe`, {
 
     // Add payment logic on button click
     const form = document.getElementById(`payment-form`);
-    form.onsubmit((e) => {
+    form.addEventListener(`submit`, (e) => {
       e.preventDefault();
       payWithCard(stripe, card, data.clientSecret);
     });
   });
+
+const payWithCard = (stripe, card, clientSecret) => {
+  // Disable btn and show spinner
+  loading(true);
+
+  // Try to confirm payment with user card
+  stripe
+    .confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: card,
+      },
+    })
+    // Handle promise
+    .then((res) => {
+      // Show error if problem occured
+      if (res.error) showError(res.error.message);
+      // Show message on success
+      else orderComplete(res.paymentIntent.id);
+    });
+};
+
+// Function to show spinner on load
+const loading = (isLoading) => {
+  // Disable the btn and show spinner on load
+  if (isLoading) {
+    document.querySelector(`button`).disabled = true;
+    document.querySelector(`#spinner`).classList.remove(`hidden`);
+    document.querySelector(`#button-text`).classList.add(`hidden`);
+  }
+  // Vice versa
+  {
+    document.querySelector(`button`).disabled = false;
+    document.querySelector(`#spinner`).classList.add(`hidden`);
+    document.querySelector(`#button-text`).classList.remove(`hidden`);
+  }
+};
+
+// Function to handle error in payment process
+const showError = (errorText) => {
+  // Stop loading process
+  loading(false);
+
+  // Select element and set error text
+  const errBlock = document.querySelector(`#card-error`);
+  errBlock.textContent = errorText;
+
+  // Hide message after 5 sec
+  setTimeout(() => (errBlock.textContent = ``), 5000);
+};
+
+// Function to handle successfull payment
+const orderComplete = (paymentId) => {
+  // Stop loading process
+  loading(false);
+
+  // Select element and set recepeit link
+  const msgBlockLink = document.querySelector(`.result-message a`);
+  msgBlockLink.setAttribute(
+    `href`,
+    `https://dashboard.stripe.com/test/payments/${paymentId}`
+  );
+
+  // Show message block and disable button
+  msgBlockLink.parentElement.classList.remove(`hidden`);
+  document.querySelector(`button`).disabled = true;
+};
